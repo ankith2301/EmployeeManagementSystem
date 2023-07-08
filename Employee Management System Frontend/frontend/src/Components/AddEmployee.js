@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import EmployeeService from '../Services/EmployeeService';
+import { useNavigate } from 'react-router-dom';
 
 const AddEmployee = () => {
     const [employee, setemployee] = useState({
@@ -10,16 +11,29 @@ const AddEmployee = () => {
     });
     const handleChange = (e) => {
         const value = e.target.value;
-        setemployee({...employee , [e.target.name]:value})
+        console.log(employee);
+        setemployee({ ...employee, [e.target.name]: value })
     }
-    const saveEmployee = (e)=>{
-        e.preventDefault(0);
-        EmployeeService.saveEmployee(employee).then((response)=>{
+    const saveEmployee = (e) => {
+        e.preventDefault();
+        EmployeeService.saveEmployee(employee).then((response) => {
             console.log(response);
-        }).catch(error =>{
+            navigate("/employeeList");
+        }).catch(error => {
             console.log(error);
         });
-    }
+    };
+    const resetForm = (e) => {
+        e.preventDefault();
+        setemployee({
+            id: "",
+            firstName: "",
+            lastName: "",
+            emailId: ""
+        });
+        console.log(employee);
+    };
+    const navigate = useNavigate();
     return (
         <div className='flex max-w-2xl shadow border-b m-auto'>
             <div className='px-8 py-8'>
@@ -40,7 +54,7 @@ const AddEmployee = () => {
                 </div>
                 <div className='items-center justify-center h-14 w-full my-5 space-x-4 pt-3'>
                     <button onClick={saveEmployee} className='rounded text-white font-semibold bg-green-400 py-1 px-4 hover:bg-green-700 text-sm'>Save</button>
-                    <button className='rounded text-white font-semibold bg-red-400 py-1 px-4 hover:bg-red-700 text-sm'>Clear</button>
+                    <button onClick={resetForm} className='rounded text-white font-semibold bg-red-400 py-1 px-4 hover:bg-red-700 text-sm'>Clear</button>
                 </div>
             </div>
 
